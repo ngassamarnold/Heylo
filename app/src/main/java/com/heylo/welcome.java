@@ -1,8 +1,11 @@
 package com.heylo;
 
+import android.content.ClipData;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.media.MediaBrowserCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -91,7 +94,8 @@ public class welcome extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-
+            Intent pinPage = new Intent(welcome.this, PinSmsActivity.class);
+            startActivity(pinPage);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
