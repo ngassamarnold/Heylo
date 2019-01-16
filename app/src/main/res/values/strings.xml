@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <resources>
     <string name="app_name">Heylo</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -28,3 +29,15 @@
     <string name="title_activity_register">Resgister</string>
     <string name="send">Send</string>
 </resources>
+=======
+<resources>
+    <string name="app_name">Heylo</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Reglages</string>
+    <string name="phone">Phone</string>
+</resources>
+>>>>>>> 6647f0b98d2193c5136208ebba0e7eab4c6e767a
