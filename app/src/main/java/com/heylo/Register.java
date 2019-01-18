@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 
@@ -29,12 +30,25 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.heylo.connexion.CodeConfirmation;
 import com.heylo.connexion.LoginActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -65,6 +79,8 @@ public class Register extends Activity implements LoaderCallbacks<Cursor> {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private RequestQueue requestQueue;
+    private StringRequest stringRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +101,9 @@ public class Register extends Activity implements LoaderCallbacks<Cursor> {
                 return false;
             }
         });*/
+
+        // pour la requuette volley
+        requestQueue= Volley.newRequestQueue(this);
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -181,13 +200,9 @@ public class Register extends Activity implements LoaderCallbacks<Cursor> {
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            //showProgress(true);
-            Intent i= new Intent(Register.this,CodeConfirmation.class);
-            startActivity(i);
-            //mAuthTask = new UserLoginTask(email, password);
-            //mAuthTask.execute((Void) null);
+
+            CheckNumber(mEmailView.getText().toString());
+
         }
     }
 
@@ -347,6 +362,55 @@ public class Register extends Activity implements LoaderCallbacks<Cursor> {
             mAuthTask = null;
             showProgress(false);
         }
+    }
+
+    /**
+     * fonction pour la valider un numéro de téléphone
+     */
+
+    public void CheckNumber(final String telephone){
+        stringRequest= new StringRequest(Request.Method.POST, BuildConfig.server + "valider-telephone", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String objetJson= jsonObject.getString("success");
+                    //Toast.makeText(getApplicationContext(),"response-> : "+jsonObject.getString("success"), Toast.LENGTH_SHORT).show();
+
+                    if(objetJson.equals("true")){
+                        /*Toast.makeText(getApplicationContext(), "code-> "+jsonObject.getString("code"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "telephone-> "+jsonObject.getString("telephone"), Toast.LENGTH_LONG).show();*/
+
+                        Intent intent= new Intent(getApplicationContext(),CodeConfirmation.class);
+                        intent.putExtra("telephone",jsonObject.getString("telephone"));
+                        intent.putExtra("code",jsonObject.getString("code"));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getApplicationContext().startActivity(intent);
+                        finish();
+                        //startActivity(new Intent(getApplicationContext(),CodeConfirmation.class));
+                    }
+                    else if(objetJson.equals("false")){
+                        Toast.makeText(getApplicationContext(),"error", Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),"Aucune connexion internet  " ,Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<String, String>();
+                hashMap.put("telephone", telephone);
+                return hashMap;
+            }
+        };
+        requestQueue.add(stringRequest);
     }
 }
 

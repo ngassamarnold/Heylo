@@ -8,18 +8,33 @@
     tools:context=".connexion.CodeConfirmation">
 
     <TextView
-        android:layout_width="fill_parent"
+        android:id="@+id/my_number"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="120dp"
         android:gravity="center"
-        android:text="@string/code_confirmation"
+        />
+    <TextView
+        android:id="@+id/textCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:id="@+id/text"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
         android:textSize="16dip" />
 
     <com.goodiebag.pinview.Pinview
         android:id="@+id/pinview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cursorVisible="false"
+        app:cursorVisible="true"
         app:forceKeyboard="true"
         app:hint="0"
         app:inputType="number"
@@ -27,4 +42,11 @@
         app:pinHeight="40dp"
         app:pinLength="5"
         app:pinWidth="40dp" />
+    <TextView
+        android:id="@+id/send_code_agent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        />
 </LinearLayout>
